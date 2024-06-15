@@ -4,6 +4,15 @@
   "description": "Highly customizable animating react native switch toggle component.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    }
+  },
   "postinstall": "dooboolab-welcome postinstall",
   "scripts": {
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
