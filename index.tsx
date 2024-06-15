@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   },
 });
 
-interface Props {
+export type SwitchToggleProps = {
   testID?: string;
   switchOn: boolean;
   onPress: () => void;
@@ -45,17 +45,22 @@ interface Props {
   RTL?: boolean;
 }
 
-function SwitchToggle(props: Props): React.ReactElement {
-  const {
-    backgroundColorOn = 'black',
-    backgroundColorOff = '#C4C4C4',
-    circleColorOn = 'white',
-    circleColorOff = '#6D6D6D',
-    duration = 300,
-    backgroundImageOn,
-    backgroundImageOff,
-  } = props;
 
+const defaultContainerStyle = {
+    marginTop: 16,
+    width: 80,
+    height: 40,
+    borderRadius: 25,
+    padding: 5,
+  }
+const defaultCircleStyle = {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+}
+
+
+function SwitchToggle({backgroundColorOn = 'black', backgroundColorOff = '#C4C4C4', circleColorOn = 'white',circleColorOff = '#6D6D6D', duration = 300, containerStyle = defaultContainerStyle,  circleStyle = defaultCircleStyle, backgroundImageOn, backgroundImageOff, ...props}: SwitchToggleProps): React.ReactElement {
   const [animXValue] = useState(new Animated.Value(props.switchOn ? 1 : 0));
 
   const getStart = (): number | Record<string, unknown> | undefined => {
@@ -63,8 +68,8 @@ function SwitchToggle(props: Props): React.ReactElement {
       ? 0
       : props.type === 0
       ? 0
-      : props.containerStyle && props.containerStyle.padding
-      ? (props.containerStyle.padding as number) * 2
+      : containerStyle && containerStyle.padding
+      ? (containerStyle.padding as number) * 2
       : {};
   };
 
@@ -81,10 +86,10 @@ function SwitchToggle(props: Props): React.ReactElement {
   };
 
   const endPos =
-    props.containerStyle && props.circleStyle
-      ? (props.containerStyle.width as number) -
-        ((props.circleStyle.width as number) +
-          ((props.containerStyle.padding as number) || 0) * 2)
+    containerStyle && circleStyle
+      ? (containerStyle.width as number) -
+        ((circleStyle.width as number) +
+          ((containerStyle.padding as number) || 0) * 2)
       : 0;
 
   const circlePosXEnd = props.RTL ? -endPos : endPos;
@@ -135,7 +140,7 @@ function SwitchToggle(props: Props): React.ReactElement {
       <Animated.View
         style={[
           styles.container,
-          props.containerStyle,
+          containerStyle,
           {
             backgroundColor: animXValue.interpolate({
               inputRange: [0, 1],
@@ -150,7 +155,7 @@ function SwitchToggle(props: Props): React.ReactElement {
         {props.switchOn && generateLeftIcon()}
         <Animated.View
           style={[
-            props.circleStyle,
+            circleStyle,
             {
               backgroundColor: animXValue.interpolate({
                 inputRange: [0, 1],
@@ -185,20 +190,5 @@ function SwitchToggle(props: Props): React.ReactElement {
     </TouchableOpacity>
   );
 }
-
-SwitchToggle.defaultProps = {
-  containerStyle: {
-    marginTop: 16,
-    width: 80,
-    height: 40,
-    borderRadius: 25,
-    padding: 5,
-  },
-  circleStyle: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-  },
-};
 
 export default SwitchToggle;
